@@ -1,33 +1,22 @@
 let bgImages = []; // array to store background images
 let currentBgIndex = 0; // index of the current background image
 let bgOpacity = 0.5; // initial opacity of the backgrounds
-let fadeOutTimer = 0; // timer for fading out the text
-let fadeInTimer = 0; // timer for fading in the text
 let currentTextIndex = 0; // index of the current text
 let texts = [
-  'ACT 1',
+  'ACT 1:  Fog of War',
   '...and it is mostly only by fogs that it plays a part.',
   '...we were compassed round by a very thick fog.',
-  'The fog was peopled with phantoms.',
-  'A sudden breeze stirred the fog.',
-  'His head swam; the fog and smoke stupefied him.',
   'Could see nothing in fog.',
   'Still fog, which the sunrise cannot pierce.',
-  'Come in, or the fog will get into the house.',
   '...fogs militate against observation by aircraft',
-  '...while from the fog others rose up, swept past and were engulfed.',
-  'I can only trust in God and wait till the fog clears.',
-  'the fog of battle, with its absorbing interests and distractions',
+  'The fog of battle, with its absorbing interests and distractions',
   'Here the fog prevents the enemy from being discovered in time...',
-  '...now distinct, now vague, now blotted out in a puff of fog.',
   '..the effect of a fog gives to things exaggerated dimensions and an unnatural appearance.',
   'The fog had now buried all heaven.',
   'A telegraphic signal, improperly interpreted, owing to the fog, was the cause of this error.',
-  '‘We will be all butchered in this fog,’ murmured another.',
-  '...the trembling immateriality, the mistlike transience, of this seemingly so solid body...'
+  '...while from the fog, close at hand, came cries and groans and crashing volleys.',
+  'What good will it do when smoke, fog, darkness, long range, excitement, the lack of coolness, forbid clear sight?'
   ];
-let textOpacity = 255; // opacity of the text
-let textFadeTimer = 0; // timer for fading the text
 
 let fadeInDuration = 3000; // 3 seconds
 let fadeOutDuration = 3000; // 3 seconds
@@ -35,18 +24,20 @@ let stayDuration = 7000; // 10 seconds
 let currentAlpha = 0;
 let startTime = 0;
 
+let myFont;
+
 function preload() {
   bgImages.push(loadImage('bg3.jpg'));
   bgImages.push(loadImage('bg2.jpg'));
+  myFont = loadFont('assets/Heebo-Medium.ttf');
 }
 
 function setup() {
-  createCanvas(480, 320);
+  createCanvas(640, 480);
   frameRate(30);
+  noCursor();
   textAlign(CENTER, CENTER);
-  fadeOutTimer = random(7000, 13000);
-  fadeInTimer = 0;
-  textFadeTimer = 0;
+  textFont(myFont);
   imageMode(CENTER);
   startTime = millis();
 }
@@ -68,29 +59,6 @@ function draw() {
   tint(255,t2);
   image(bgImages[(currentBgIndex + 1) % bgImages.length], x2, y2, width * 2, height * 2);
   let s = second();
-  
- // update text opacity based on fade timers
-  // if (fadeInTimer > 0) {
-  //   textOpacity = map(fadeInTimer, 3000, 0, 0, 255);
-  //   fadeInTimer -= deltaTime;
-  // } else if (fadeOutTimer > 0) {
-  //   textOpacity = map(fadeOutTimer, 7000, 4000, 255, 0);
-  //   fadeOutTimer -= deltaTime;
-  //   if (textFadeTimer === 0) {
-  //     textFadeTimer = 3000;
-  //   }
-  // } else if (textFadeTimer > 0) {
-  //   textOpacity = map(textFadeTimer, 3000, 0, 0, 255);
-  //   textFadeTimer -= deltaTime;
-  // } else {
-  //   // reset timers and choose new text
-  //   textOpacity = 0;
-  //   //fadeOutTimer = random(10000, 13000);
-  //   fadeOutTimer = 10000;
-  //   fadeInTimer = 3000;
-  //   textFadeTimer = 0;
-  // }
-  
   let elapsedTime = millis() - startTime;
 
   if (elapsedTime < fadeInDuration) {
@@ -111,24 +79,20 @@ function draw() {
     currentTextIndex = int(random(texts.length));
     startTime = millis(); // restart the animation
   }
- 
-  
-  print(currentTextIndex);
-  
-  if (currentAlpha == 2) {
-    //currentTextIndex = (currentTextIndex + 1) % texts.length;
-    // currentTextIndex = int(random(texts.length));
-  }
   
   // draw the text with the current opacity
   if (currentTextIndex === 0) {
-    background (0);
+    if (millis() < 5000) {
+      background(0);
+    } else {
+      background (0, currentAlpha); 
+    }
     fill(255, currentAlpha);
-    textSize(30);
+    textSize(40);
   } else {
     fill(0, currentAlpha);
-    textSize(20);
+    textSize(28);
   }
   textStyle(BOLD);
-  text(texts[currentTextIndex], width*0.1, height*0.1, width*0.8, height*0.8);
+  text(texts[currentTextIndex], width*0.05, height*0.05, width*0.9, height*0.9);
 }
